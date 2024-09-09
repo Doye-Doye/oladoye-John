@@ -1,0 +1,53 @@
+USE elect_car;
+CREATE TABLE credit(
+TransactionID VARCHAR (500),
+CustomerID VARCHAR (500),
+TranscationDate DATE,
+TranscationAmount FLOAT,
+Merchant VARCHAR (500),
+Category VARCHAR (500),
+CardType VARCHAR (500),
+CardNumber VARCHAR (500),
+TransactionCity VARCHAR (500),
+TransactionState VARCHAR (500));
+SELECT * FROM credit;
+LOAD DATA INFILE'C:/ProgramData/MySQL/MySQL Server 8.0/Data/elect_car/credit_card_transactions_2021.csv'INTO TABLE credit
+FIELDS TERMINATED BY ','
+OPTIONALLY ENCLOSED BY '"'
+LINES TERMINATED BY '\r\n'
+IGNORE 1 ROWS;
+SELECT * FROM credit;
+
+-- CHECKING FOR DUPLICATES
+SELECT TransactionID, COUNT(*) FROM credit
+GROUP BY TransactionID HAVING COUNT(*)>1;
+
+-- NUMBER OF SALES CATEGORIES
+SELECT Category, COUNT(*) AS NUM FROM credit
+GROUP BY Category ORDER BY NUM DESC;
+
+-- TOTAL PAYMENT MADE BY CARDTYPE
+SELECT CardType, SUM(TranscationAmount) AS AMOUNT FROM credit
+GROUP BY CardType ORDER BY AMOUNT DESC;
+
+-- CITY WITH THE HIGHEST SALE
+SELECT TransactionCity, ROUND(SUM(TranscationAmount),2) AS SALE FROM credit
+GROUP BY TransactionCity ORDER BY SALE DESC;
+
+-- SALE ON EACH OF THE CATEGORY
+-- ROUND UP TO 2 DECIMAL PLACES (Round function)
+SELECT Category, ROUND(SUM(TranscationAmount),2) AS AMOUNT FROM credit
+GROUP BY Category ORDER BY AMOUNT DESC;
+
+-- ROUND UP TO THE NEAREST INTEGER (Ceiling function)
+SELECT Category, CEILING(SUM(TranscationAmount)) AS AMOUNT FROM credit
+GROUP BY Category ORDER BY AMOUNT DESC;
+
+
+-- ROUND DOWN TO THE NEAREST INTEGER (Floor function)
+SELECT Category, FLOOR(SUM(TranscationAmount)) AS AMOUNT FROM credit
+GROUP BY Category ORDER BY AMOUNT DESC;
+
+
+SELECT * FROM CREDIT; 
+
